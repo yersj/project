@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="layouts/layout.html">
+<div layout:fragment="content">
+    x
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+
+            <table class="table">
+                <tr>
+                    <th scope="row">FullName: </th>
+                    <td th:text="${currentUser.fullName}"> </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">Email:</th>
+                    <td th:text="${currentUser.email}"> </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+</html>
