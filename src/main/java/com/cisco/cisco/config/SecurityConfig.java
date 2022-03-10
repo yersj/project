@@ -1,6 +1,6 @@
 package com.cisco.cisco.config;
 
-import com.cisco.cisco.services.UserService;
+import com.cisco.cisco.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
-        public UserService userService;
+        public UserServiceImpl userService;
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/signin").permitAll()            // <- which page is default page to sign in (from where to send request)
                 .usernameParameter("user_email")             // <- input type email name="user_email"
                 .passwordParameter("user_password")          // <- input type password name="user_password
-                .defaultSuccessUrl("/profile")               // <- where to redirect after success sign in process
+                .defaultSuccessUrl("/profilePage    ")               // <- where to redirect after success sign in process
                 .failureUrl("/signin?error");                // <- where to redirect if unsuccessful sign in
         http.logout()
                 .logoutSuccessUrl("/signin")                 // <- after log out button

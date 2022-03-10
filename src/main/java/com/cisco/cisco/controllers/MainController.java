@@ -2,7 +2,8 @@ package com.cisco.cisco.controllers;
 
 import com.cisco.cisco.entities.Course;
 import com.cisco.cisco.entities.User;
-import com.cisco.cisco.services.UserService;
+import com.cisco.cisco.services.UserServiceImpl;
+import com.cisco.cisco.services.implementation.CourseServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,9 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,10 @@ public class MainController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private  UserService userService;
+    private UserServiceImpl userService;
+
+    @Autowired
+    private CourseServiceImpl courseService;
 
 
 
@@ -37,7 +39,12 @@ public class MainController {
     @GetMapping(value = "/")
     public String index(Model model){
         model.addAttribute("currentUser",getCurrentUser());
-        return "index";
+        return "signin";
+    }
+    @GetMapping(value = "/grade")
+    public String gradePage(Model model){
+        model.addAttribute("currentUser",getCurrentUser());
+        return "grades";
     }
 
     @GetMapping(value = "/signin")
@@ -101,8 +108,9 @@ public class MainController {
     @GetMapping(value = "/courses")
     public String getCourses(Model model){
         model.addAttribute("currentUser",getCurrentUser());
-        model.addAttribute("courses",userService.getAllCourses());
-        List<Course> courseList=userService.getAllCourses();
+        User user=getCurrentUser();
+        model.addAttribute("courses",user.getCourses());
+        List<Course> courseList=courseService.getAllCourses();
         model.addAttribute("courseList",courseList);
         return "courses";
     }
@@ -127,14 +135,22 @@ public class MainController {
 
         User user=userService.getUser(student_id);
         if(user!=null){
-            Course course= userService.getCourse(course_id);
+            Course course= courseService.getCourse(course_id);
             if(course!=null){
-                 List<Course> courseList=userService.getAllCourses();
+                 List<Course> courseList=user.getCourses(); //
                  if(courseList==null){
                      courseList=new ArrayList<>();
                  }
-                 courseList.add(course);
-                 user.setCourses(courseList);
+                for (Course c:courseList) {
+                   if(!c.equals(course)){
+                       user.setCourseGrade(null);
+                       courseList.add(course);
+
+                   }
+                }
+
+
+//                 user.setCourses(courseList);
                  userService.saveUser(user);
                  return "redirect:/courses";
             }

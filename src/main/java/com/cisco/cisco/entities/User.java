@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +22,7 @@ import java.util.Set;
 @Component
 public class User implements UserDetails {
 
-  @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -39,7 +38,14 @@ public class User implements UserDetails {
     @Fetch(FetchMode.SUBSELECT)
     private List<Course> courses;
 
-  @Override
+
+    @OneToMany(mappedBy = "user")
+    Set<CourseGrade> courseGrade;
+
+
+
+
+    @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return roles;
   }

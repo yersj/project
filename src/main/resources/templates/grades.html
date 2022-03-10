@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="layouts/layout.html"
+>
+
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h2 class="text-center">GRADES</h2>
+            <table class="table mt-2">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Credits</th>
+                    <th scope="col">Grades</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="course:${currentUser.courses}">
+                    <th scope="row" th:text="${course.id}"></th>
+                    <td th:text="${course.code}"></td>
+                    <td th:text="${course.name}"></td>
+                    <td th:text="${course.credits}"></td>
+                    <th scope="col">100</th>
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+   </div>
+
+</html>
