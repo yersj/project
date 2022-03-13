@@ -31,6 +31,9 @@ public class User implements UserDetails {
     private String password;
     private String fullName;
 
+    @Column(name = "photo")
+    private String photo;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     private List<AuthRole> roles;
 
@@ -39,7 +42,7 @@ public class User implements UserDetails {
     private List<Course> courses;
 
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "student")
     Set<CourseGrade> courseGrade;
 
 

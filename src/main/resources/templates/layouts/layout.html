@@ -5,9 +5,9 @@
 <head th:replace="fragments/head::head">
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12" style="width: 100%;">
+
+    <div class="row" style="width: 100%;">
+        <div class="col-lg-12" >
             <nav  class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">Portal</a>
@@ -21,9 +21,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" th:href="@{'/'}">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{'/'}">Grades</a>
-                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" th:href="@{'/signin'}" sec:authorize="isAnonymous()">SIGN IN</a>
                             </li>
@@ -37,8 +35,8 @@
 
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#" >Profile</a></li>
-                                    <li><a class="dropdown-item" href="#">Notifications</a></li>
+                                    <li><a class="dropdown-item" th:href="@{'/profilePage'}">Profile</a></li>
+
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -74,11 +72,9 @@
             <div  sec:authorize="hasAnyRole('ROLE_TEACHER')">
                 <ul>
                     <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/profilePage'}">Profile</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/courses'}">My Courses</a></li>
+                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/teacherCourses'}">My Courses</a></li>
                     <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/grade'}">Grading</a></li>
                     <li style="list-style-type:none"><a style="text-decoration: none" href="#">Attendance</a></li>
-
-                    <li style="list-style-type:none"><a style="text-decoration: none" href="#">birbale</a></li>
                     <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/toExit'}">Logout</a></li>
                 </ul>
             </div>

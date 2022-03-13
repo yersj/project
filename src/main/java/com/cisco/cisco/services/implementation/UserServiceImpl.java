@@ -1,11 +1,11 @@
-package com.cisco.cisco.services;
-
+package com.cisco.cisco.services.implementation;
 import com.cisco.cisco.entities.AuthRole;
 import com.cisco.cisco.entities.Course;
 import com.cisco.cisco.entities.User;
 import com.cisco.cisco.repositories.CourseRepository;
 import com.cisco.cisco.repositories.RoleRepository;
 import com.cisco.cisco.repositories.UserRepository;
+import com.cisco.cisco.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,13 +19,14 @@ import java.util.List;
 
 @Service
 
-public class UserServiceImpl implements UserDetailsService,UserService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
 
     @Autowired
     private  UserRepository userRepository;
     @Autowired
     private  RoleRepository roleRepository;
+
     public User findByEmail(String email){
         return userRepository.findByEmail(email);
     }
@@ -42,6 +43,9 @@ public class UserServiceImpl implements UserDetailsService,UserService {
 
     }
 
+//    public List<User> getAllStudentsByCourseId(Long id){
+//        return userRepository.findAllByCourseId(id);
+//    }
     public User register(User user){
 
         AuthRole role= roleRepository.findByRole("ROLE_STUDENT");

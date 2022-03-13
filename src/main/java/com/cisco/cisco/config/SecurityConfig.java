@@ -1,6 +1,6 @@
 package com.cisco.cisco.config;
 
-import com.cisco.cisco.services.UserServiceImpl;
+import com.cisco.cisco.services.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
-        public UserServiceImpl userService;
+        private UserServiceImpl userService;
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {

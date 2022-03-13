@@ -13,19 +13,19 @@
                 <thead>
                 <tr>
 
-                    <th scope="col">Course Code</th>
-                    <th scope="col">Course Name</th>
-                    <th scope="col">Credits</th>
+                    <th scope="col">Student name</th>
                     <th scope="col">Grade</th>
+
+
 
                 </tr>
                 </thead>
                 <tbody>
-                <tr  th:each="course:${currentUser.getCourses()}">
-                    <th  scope="row" th:text="${course.code}"></th>
-                    <td th:text="${course.name}"></td>
-                    <td th:text="${course.credits}"></td>
+                <tr  th:each="s:${students}">
+
+                    <td   th:text="${s.fullName}"></td>
                     <td>100</td>
+
 
                 </tr>
 

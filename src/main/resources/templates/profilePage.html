@@ -10,6 +10,9 @@
 
             <table class="table">
                 <tr>
+                    <td><img th:src="@{'view-photo/'+${currentUser.photo}}" alt="photo" width="280px"></td>
+                </tr>
+                <tr>
                     <th scope="row">FullName: </th>
                     <td th:text="${currentUser.fullName}"> </td>
                 </tr>
@@ -18,6 +21,7 @@
                     <th scope="row">Email:</th>
                     <td th:text="${currentUser.email}"> </td>
                 </tr>
+
             </table>
         </div>
     </div>

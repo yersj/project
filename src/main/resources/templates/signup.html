@@ -5,18 +5,18 @@
       layout:decorate="layouts/layout.html">
 <div layout:fragment="content">
     <div>
-        <h1 class="text-center">SIGN IN</h1>
+        <h1 class="text-center">ADD STUDENT </h1>
     </div>
 
 
-    <form th:action="@{'/signup'}" method="post">
+    <form th:action="@{'/signup'}" method="post" enctype="multipart/form-data">
         <div class="row mt-3">
             <div class="col-12">
                 <label>Fullname:</label>
             </div>
         </div>
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-10">
                 <input type="text" name="user_fullname" class="form-control" placeholder="Insert fullname" required>
             </div>
         </div>
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-10">
                 <input type="email" name="user_email" class="form-control" placeholder="Insert email" required>
             </div>
         </div>
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-10">
                 <input type="password" name="user_password" class="form-control" placeholder="Insert password" required>
             </div>
         </div>
@@ -46,13 +46,18 @@
             </div>
         </div>
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-10">
                 <input type="password" name="user_conf_password" class="form-control" placeholder="Insert again password" required>
             </div>
         </div>
+        <div class=" row mt-3">
+            <label for="formFileSm" class="form-label">Choose student photo</label>
+            <input class="form-control form-control-sm" id="formFileSm" name="userPhoto" type="file">
+        </div>
+
         <div class="row mt-3">
             <div class="col-12">
-                <button class="btn btn-success">SIGN UP</button>
+                <button class="btn btn-success">ADD</button>
             </div>
         </div>
     </form>

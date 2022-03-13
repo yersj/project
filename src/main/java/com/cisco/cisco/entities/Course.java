@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,11 @@ public class Course {
     @OneToMany(mappedBy = "course")
     Set<CourseGrade> courseGrade;
 
+    @ManyToMany
+    private List<User> users;
+
+    @ManyToOne
+    private User teacher;  //my courses view
 
 
 
