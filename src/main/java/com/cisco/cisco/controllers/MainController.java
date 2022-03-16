@@ -1,10 +1,13 @@
 package com.cisco.cisco.controllers;
 
 import com.cisco.cisco.entities.Course;
-import com.cisco.cisco.entities.CourseGrade;
+
+import com.cisco.cisco.entities.CourseMark;
 import com.cisco.cisco.entities.User;
+import com.cisco.cisco.services.CourseMarkService;
+import com.cisco.cisco.services.implementation.CourseMarkServiceImpl;
 import com.cisco.cisco.services.implementation.UserServiceImpl;
-import com.cisco.cisco.services.implementation.CourseGradeServiceImpl;
+
 import com.cisco.cisco.services.implementation.CourseServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -17,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +48,7 @@ public class MainController {
     private CourseServiceImpl courseService;
 
     @Autowired
-    private CourseGradeServiceImpl courseGradeService;
+    private CourseMarkServiceImpl courseMarkService;
 
     @Value("${file.photo.upload}")
     private String uploadPath;
@@ -74,17 +78,29 @@ public class MainController {
 
         return "grades";
     }
-    @GetMapping(value = "/filter-subject/{courseId}")
+    @GetMapping(value = "/filter-subject/{courseId}/{teacherId}")
     public String studentsBySubject(Model model,
-                                    @PathVariable(name="courseId") Long courseId) {
+                                    @PathVariable(name="courseId") Long courseId,
+                                    @PathVariable(name = "teacherId")Long teacherId) {
+        List<User> list=userService.getAllStudentsByCourseId(courseId);
+        list.removeIf(u -> (u.getId()) == teacherId);
         model.addAttribute("currentUser", getCurrentUser());
-//      model.addAttribute("students",userService.getAllStudentsByCourseId(courseId));
-        model.addAttribute("courses",courseService.getAllCourses());
-//        List<CourseGrade> courseGradeList=courseGradeService.getAllByUserId(getCurrentUser().getId());
-//        model.addAttribute("user_courses_grades",courseGradeList);
-
-
+        model.addAttribute("students",list);
+        model.addAttribute("courseId",courseId);
         return "grading";
+    }
+    @GetMapping(value = "/grade-details/{studentId}/{courseId}")
+    public String gradeDetails(Model model,
+                               @PathVariable(name = "studentId")Long studentId,
+                               @PathVariable(name = "courseId")Long courseId){
+        if(courseMarkService.findCourseMark(courseId,studentId)==null){
+            return "redirect:/grading";
+        }
+        model.addAttribute("courseMark",courseMarkService.findCourseMark(courseId,studentId));
+        model.addAttribute("currentUser", getCurrentUser());
+        model.addAttribute("student",userService.getUser(studentId));
+        return "grade-details";
+
     }
 
 
@@ -148,6 +164,8 @@ public class MainController {
                 user.setPhoto(userPhoto);
                 userService.register(user);
 
+
+
                 User newUser = userService.register(user);
                 if (newUser != null) {
                     return "redirect:/signin?success";
@@ -159,10 +177,10 @@ public class MainController {
     }
 
 
-    @GetMapping(value = "/courses")
-    public String getCourses(Model model) {
+    @GetMapping(value = "/courses/{userId}")
+    public String getCourses(Model model,@PathVariable(name = "userId")Long userId) {
         model.addAttribute("currentUser", getCurrentUser());
-        User user = getCurrentUser();
+        User user = userService.getUser(userId);
         model.addAttribute("courses", user.getCourses());
         List<Course> courseList = courseService.getAllCourses();
         model.addAttribute("courseList", courseList);
@@ -186,7 +204,8 @@ public class MainController {
 
     @PostMapping(value = "/assigncourse")
     public String assignCourse(@RequestParam(name = "course_id") Long course_id,
-                               @RequestParam(name = "student_id") Long student_id) {
+                               @RequestParam(name = "student_id") Long student_id,Model model) {
+
 
         User user = userService.getUser(student_id);
         if (user != null) {
@@ -196,24 +215,23 @@ public class MainController {
                 if (courseList == null) {
                     courseList = new ArrayList<>();
                 }
+                if(!courseList.contains(course)){
+                    courseList.add(course);
+                }
 
-                user.setCourseGrade(null);
-                courseList.add(course);
                 user.setCourses(courseList);
-
-
-                CourseGrade courseGrade = new CourseGrade();
-                courseGrade.setStudent(user);
-                courseGrade.setCourse(course);
-                courseGrade.setGrade(0);
-                courseGradeService.save(courseGrade);
-
-//                 user.setCourses(courseList);
                 userService.saveUser(user);
-                return "redirect:/courses";
+
+                CourseMark courseMark=new CourseMark();
+                courseMark.setStudent(user);
+                courseMark.setCourse(course);
+
+
+                model.addAttribute("courses", user.getCourses());
+                return "redirect:/courses/"+user.getId();
             }
         }
-        return "redirect:/courses";
+        return "redirect:/courses/"+user.getId();
     }
 
     @GetMapping(value = "/view-photo/{photoName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})

@@ -25,7 +25,7 @@
                     <td th:text="${course.code}"></td>
                     <td th:text="${course.name}"></td>
                     <td th:text="${course.credits}"></td>
-                    <td><a th:href="@{'/filter-subject/'+${course.id}}" class="btn btn-info">grades</a></td>
+                    <td><a th:href="@{'/filter-subject/'+${course.id}+'/'+${currentUser.id}}" class="btn btn-info">grades</a></td>
                 </tr>
 
                 </tbody>

@@ -11,8 +11,8 @@ import java.util.Set;
 @Entity
 @Table(name = "courses")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +22,9 @@ public class Course {
     private String code;
     private int credits;
 
-    @OneToMany(mappedBy = "course")
-    Set<CourseGrade> courseGrade;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User teacher;
 
-    @ManyToMany
-    private List<User> users;
-
-    @ManyToOne
-    private User teacher;  //my courses view
 
 
 

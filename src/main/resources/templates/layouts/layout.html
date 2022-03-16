@@ -61,7 +61,7 @@
             <div  sec:authorize="hasAnyRole('ROLE_STUDENT')">
                 <ul>
                     <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/profilePage'}">Student Profile</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/courses'}">Course registration</a></li>
+                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/courses/'+${currentUser.id}}">Course registration</a></li>
                     <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/grade'}">Grades List</a></li>
                     <li style="list-style-type:none"><a style="text-decoration: none" href="#">Attendance</a></li>
 

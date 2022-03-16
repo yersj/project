@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     }
 
-//    public List<User> getAllStudentsByCourseId(Long id){
-//        return userRepository.findAllByCourseId(id);
-//    }
+    public List<User> getAllStudentsByCourseId(Long id){
+    return userRepository.findAllByCourseId(id);
+    }
     public User register(User user){
 
         AuthRole role= roleRepository.findByRole("ROLE_STUDENT");

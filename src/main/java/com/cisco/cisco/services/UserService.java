@@ -9,5 +9,5 @@ public interface UserService {
     public void saveUser(User user);
     public User register(User user);
     public User findByEmail(String email);
-//    List<User> getAllStudentsByCourseId(Long id);
+    List<User> getAllStudentsByCourseId(Long id);
 }

@@ -21,10 +21,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr  th:each="s:${students}">
+                <tr  >
 
-                    <td   th:text="${s.fullName}"></td>
-                    <td><a th:href="@{'/grade-details/'+${s.id}+'/'+${courseId}}" class="btn btn-info">Details</a></td>
+                    <td   th:text="${student.fullName}"></td>
+                    <td th:text="${courseMark.markValue}"></td>
 
 
                 </tr>

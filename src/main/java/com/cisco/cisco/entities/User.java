@@ -17,8 +17,8 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Component
 public class User implements UserDetails {
 
@@ -41,9 +41,9 @@ public class User implements UserDetails {
     @Fetch(FetchMode.SUBSELECT)
     private List<Course> courses;
 
-
-    @OneToMany(mappedBy = "student")
-    Set<CourseGrade> courseGrade;
+//
+//    @OneToMany(mappedBy = "student")
+//    Set<CourseGrade> courseGrade;
 
 
 
