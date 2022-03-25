@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/signin").permitAll()            // <- which page is default page to sign in (from where to send request)
                 .usernameParameter("user_email")             // <- input type email name="user_email"
                 .passwordParameter("user_password")          // <- input type password name="user_password
-                .defaultSuccessUrl("/profilePage    ")               // <- where to redirect after success sign in process
+                .defaultSuccessUrl("/profilePage")               // <- where to redirect after success sign in process
                 .failureUrl("/signin?error");                // <- where to redirect if unsuccessful sign in
         http.logout()
                 .logoutSuccessUrl("/signin")                 // <- after log out button

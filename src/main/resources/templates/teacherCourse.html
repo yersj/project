@@ -12,19 +12,17 @@
             <table class="table mt-2">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
+
                     <th scope="col">Course Code</th>
                     <th scope="col">Course Name</th>
-                    <th scope="col">Credits</th>
+
 
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="course:${currentUser.courses}">
-                    <th scope="row" th:text="${course.id}"></th>
-                    <td th:text="${course.code}"></td>
+                <tr th:each="course:${coursesOfTeacher}">
+                    <th scope="row" th:text="${course.code}"></th>
                     <td th:text="${course.name}"></td>
-                    <td th:text="${course.credits}"></td>
                     <td><a th:href="@{'/filter-subject/'+${course.id}+'/'+${currentUser.id}}" class="btn btn-info">grades</a></td>
                 </tr>
 

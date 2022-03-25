@@ -21,12 +21,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr  th:each="course:${currentUser.getCourses()}">
-                    <th  scope="row" th:text="${course.code}"></th>
-                    <td th:text="${course.name}"></td>
-                    <td th:text="${course.credits}"></td>
-                    <td>100</td>
+                <tr  th:each="course:${courseMark}">
+                    <th  scope="row" th:text="${course.course.code}"></th>
+                    <td th:text="${course.course.name}"></td>
+                    <td th:text="${course.course.credits}"></td>
+                    <td th:text="${course.markValue==0}?'grade not set':${course.markValue}"></td>
 
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <th>GPA:</th>
                 </tr>
 
                 </tbody>

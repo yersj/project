@@ -18,4 +18,11 @@ public interface CourseMarkRepository extends JpaRepository<CourseMark, Long> {
     CourseMark findCourseMarkByCourseIdAndStudentId(Long courseId,Long studentId);
 
 
+    List<CourseMark> findCourseMarkByStudentId(Long student_id);
+
+    List<CourseMark> findCourseMarkByCourseId(Long course_id);
+
+    public void deleteCourseMarkByCourseIdAndStudentId(Long course_id,Long student_id);
+
+
 }

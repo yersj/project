@@ -9,5 +9,5 @@ public interface CourseService {
     public Course getCourse(Long id);
 
     public List<Course> getAllCourses();
-
+    public List<Course> findTeacherCourses(Long teacher_id);
 }

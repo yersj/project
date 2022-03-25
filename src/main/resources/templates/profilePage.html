@@ -7,14 +7,17 @@
     x
     <div class="row">
         <div class="col-lg-6 mx-auto">
-
+            <form th:action="@{'/edit-profile/'+${currentUser.id}}" method="post">
             <table class="table">
                 <tr>
                     <td><img th:src="@{'view-photo/'+${currentUser.photo}}" alt="photo" width="280px"></td>
                 </tr>
+
                 <tr>
                     <th scope="row">FullName: </th>
-                    <td th:text="${currentUser.fullName}"> </td>
+
+                    <td ><input type="text" name="newName"  th:value="${currentUser.fullName}" > </td>
+
                 </tr>
 
                 <tr>
@@ -22,7 +25,12 @@
                     <td th:text="${currentUser.email}"> </td>
                 </tr>
 
+
+
+
             </table>
+               <button type="submit" class="btn btn-success">UPDATE NAME</button>
+            </form>
         </div>
     </div>
 

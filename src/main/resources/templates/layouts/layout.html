@@ -57,29 +57,38 @@
     </div>
 
     <div class="row mt-3 ">
-        <div class="col-2" sec:authorize="isAuthenticated()">
+        <div class="col-lg-2" sec:authorize="isAuthenticated()">
             <div  sec:authorize="hasAnyRole('ROLE_STUDENT')">
-                <ul>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/profilePage'}">Student Profile</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/courses/'+${currentUser.id}}">Course registration</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/grade'}">Grades List</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" href="#">Attendance</a></li>
-
-                    <li style="list-style-type:none"><a style="text-decoration: none" href="#">Transcript</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/toExit'}">Sign out</a></li>
+                <ul class="nav flex-column">
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link" style="text-decoration: none" th:href="@{'/profilePage'}">Student Profile</a></li>
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/courses/'+${currentUser.id}}">Course registration</a></li>
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/grade/'+${currentUser.id}}">Grades List</a></li>
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" href="#">Attendance</a></li>
+<!--                    <li class="nav-item" style="list-style-type:none"><a class="nav-link" style="text-decoration: none" th:href="@{'/grade/'+${currentUser.id}}">Transcript</a></li>-->
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link" tyle="text-decoration: none" th:href="@{'/toExit'}">Sign out</a></li>
                 </ul>
             </div>
             <div  sec:authorize="hasAnyRole('ROLE_TEACHER')">
-                <ul>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/profilePage'}">Profile</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/teacherCourses'}">My Courses</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/grade'}">Grading</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" href="#">Attendance</a></li>
-                    <li style="list-style-type:none"><a style="text-decoration: none" th:href="@{'/toExit'}">Logout</a></li>
+                <ul class="nav flex-column">
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/profilePage'}">Profile</a></li>
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/teacherCourses/'+${currentUser.id}}">My Courses</a></li>
+<!--                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/grade'}">Grading</a></li>-->
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" href="#">Attendance</a></li>
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/toExit'}">Logout</a></li>
+                </ul>
+            </div>
+            <div  sec:authorize="hasAnyRole('ROLE_DEANOFFICE')">
+                <ul class="nav flex-column">
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/profilePage'}">Profile</a></li>
+<!--                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/announcement'}">Announcement</a></li>-->
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none"  th:href="@{'/signup'}">Add Student</a></li>
+<!--                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none"  th:href="@{'/delete-student'}">Delete Student</a></li>-->
+                    <!--                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/grade'}">Grading</a></li>-->
+                    <li class="nav-item" style="list-style-type:none"><a class="nav-link"  style="text-decoration: none" th:href="@{'/toExit'}">Logout</a></li>
                 </ul>
             </div>
         </div>
-        <div class="col-10" layout:fragment="content">
+        <div class="col-lg-10" layout:fragment="content">
         </div>
     </div>
 

@@ -69,24 +69,30 @@ public class MainController {
         return "signin";
     }
 
-    @GetMapping(value = "/grade")
-    public String gradePage(Model model) {
-        model.addAttribute("currentUser", getCurrentUser());
+    @GetMapping(value = "/grade/{studentId}")
+    public String gradePage(Model model,@PathVariable(name = "studentId")Long student_id) {
+
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
+        model.addAttribute("courseMark",courseMarkService.findCourseMarkByStudentId(student_id));
 //        List<CourseGrade> courseGradeList=courseGradeService.getAllByUserId(getCurrentUser().getId());
 //        model.addAttribute("user_courses_grades",courseGradeList);
 
 
         return "grades";
     }
+
     @GetMapping(value = "/filter-subject/{courseId}/{teacherId}")
     public String studentsBySubject(Model model,
                                     @PathVariable(name="courseId") Long courseId,
                                     @PathVariable(name = "teacherId")Long teacherId) {
-        List<User> list=userService.getAllStudentsByCourseId(courseId);
-        list.removeIf(u -> (u.getId()) == teacherId);
-        model.addAttribute("currentUser", getCurrentUser());
-        model.addAttribute("students",list);
-        model.addAttribute("courseId",courseId);
+//        List<User> list=userService.getAllStudentsByCourseId(courseId);
+//        list.removeIf(u -> (u.getId()) == teacherId);
+
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
+//        model.addAttribute("students",list);
+        model.addAttribute("courseStudents",courseMarkService.findCourseMarkByCourseId(courseId));
         return "grading";
     }
     @GetMapping(value = "/grade-details/{studentId}/{courseId}")
@@ -97,9 +103,30 @@ public class MainController {
             return "redirect:/grading";
         }
         model.addAttribute("courseMark",courseMarkService.findCourseMark(courseId,studentId));
-        model.addAttribute("currentUser", getCurrentUser());
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
         model.addAttribute("student",userService.getUser(studentId));
         return "grade-details";
+
+    }
+    @PostMapping(value = "/grade-details/{studentId}/{courseId}/{teacherId}")
+    public String editGrade(Model model,
+                               @PathVariable(name = "studentId")Long studentId,
+                               @PathVariable(name = "courseId")Long courseId,
+                            @PathVariable(name = "teacherId")Long teacherId,
+                            @RequestParam(name = "newMark")int mark){
+        if(mark>=0 && mark<=100) {
+            CourseMark courseMark = courseMarkService.findCourseMark(courseId, studentId);
+            courseMark.setMarkValue(mark);
+            courseMarkService.save(courseMark);
+        }
+
+//        model.addAttribute("courseMark",courseMarkService.findCourseMark(courseId,studentId));
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
+        User teacher=getCurrentUser();
+//        model.addAttribute("student",userService.getUser(studentId));
+        return "redirect:/filter-subject/"+courseId+"/"+teacherId;
 
     }
 
@@ -110,35 +137,47 @@ public class MainController {
         return "signin";
     }
 
-    @GetMapping(value = "/profile")
-    @PreAuthorize("isAuthenticated()")
-    public String deanPanel(Model model) {
-        model.addAttribute("currentUser", getCurrentUser());
-        return "profile";
+//    @GetMapping(value = "/profile")
+//    @PreAuthorize("isAuthenticated()")
+//    public String deanPanel(Model model) {
+//        model.addAttribute("currentUser", getCurrentUser());
+//        return "profile";
+//    }
+    @PostMapping(value = "/edit-profile/{userId}")
+    public String editName(@PathVariable(name = "userId") Long id,@RequestParam(name = "newName") String name){
+        User u=userService.getUser(id);
+        if(!name.equals("")) {
+            u.setFullName(name);
+        }
+        userService.saveUser(u);
+
+        return "redirect:/profilePage";
     }
 
 
-
-    @GetMapping(value = "/teacherCourses")
+    @GetMapping(value = "/teacherCourses/{teacherId}")
     @PreAuthorize("hasAnyRole('ROLE_TEACHER','ROLE_DEANOFFICE')")
-    public String getCourseForTeacher(Model model) {
-        model.addAttribute("currentUser", getCurrentUser());
+    public String getCourseForTeacher(Model model,@PathVariable(name = "teacherId")Long teacher_id) {
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
         User user = getCurrentUser();
-        model.addAttribute("courses", user.getCourses());
-        List<Course> courseList = courseService.getAllCourses();
-        model.addAttribute("courseList", courseList);
+        courseService.findTeacherCourses(teacher_id);
+        model.addAttribute("coursesOfTeacher", courseService.findTeacherCourses(teacher_id));
+
         return "teacherCourse";
     }
 
     @GetMapping(value = "/accessError")
     public String accessError(Model model) {
-        model.addAttribute("currentUser", getCurrentUser());
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
         return "accesserror";
     }
 
     @GetMapping(value = "/signup")
     public String signUp(Model model) {
-        model.addAttribute("currentUser", getCurrentUser());
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
         return "signup";
     }
 
@@ -179,12 +218,25 @@ public class MainController {
 
     @GetMapping(value = "/courses/{userId}")
     public String getCourses(Model model,@PathVariable(name = "userId")Long userId) {
-        model.addAttribute("currentUser", getCurrentUser());
-        User user = userService.getUser(userId);
-        model.addAttribute("courses", user.getCourses());
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
+        User student = userService.getUser(userId);
+
+        List<CourseMark> courseMarks= courseMarkService.findCourseMarkByStudentId(userId);
+        if(courseMarks!=null){
+            model.addAttribute("courseMarks",courseMarks);
+        }
         List<Course> courseList = courseService.getAllCourses();
         model.addAttribute("courseList", courseList);
         return "courses";
+    }
+    @PostMapping(value = "/delete-course")
+    public String deleteCourseOfStudent(@RequestParam(name = "course_id") Long course_id,
+                                        @RequestParam(name = "student_id") Long student_id,Model model){
+        User student = userService.getUser(student_id);
+
+        courseMarkService.deleteCourseOfStudent(course_id,student_id);
+        return "redirect:/courses/"+student.getId();
     }
 
     private User getCurrentUser() {
@@ -198,41 +250,78 @@ public class MainController {
 
     @GetMapping(value = "/profilePage")
     public String profilePage(Model model) {
-        model.addAttribute("currentUser", getCurrentUser());
+
+
+        User u=userService.getUser(getCurrentUser().getId());
+        model.addAttribute("currentUser",u);
         return "profilePage";
     }
 
+//    @PostMapping(value = "/assigncourse")
+//    public String assignCourse(@RequestParam(name = "course_id") Long course_id,
+//                               @RequestParam(name = "student_id") Long student_id,Model model) {
+//
+//
+//        User user = userService.getUser(student_id);
+//        if (user != null) {
+//            Course course = courseService.getCourse(course_id);
+//            if (course != null) {
+//                List<Course> courseList = user.getCourses(); //
+//                if (courseList == null) {
+//                    courseList = new ArrayList<>();
+//                }
+//                if(!courseList.contains(course)){
+//                    courseList.add(course);
+//                }
+//
+//                user.setCourses(courseList);
+//                userService.saveUser(user);
+//
+//                CourseMark courseMark=new CourseMark();
+//                courseMark.setStudent(user);
+//                courseMark.setCourse(course);
+//
+//
+//                model.addAttribute("courses", user.getCourses());
+//                return "redirect:/courses/"+user.getId();
+//            }
+//        }
+//        return "redirect:/courses/"+user.getId();
+//    }
+
+
+
     @PostMapping(value = "/assigncourse")
-    public String assignCourse(@RequestParam(name = "course_id") Long course_id,
-                               @RequestParam(name = "student_id") Long student_id,Model model) {
+    public String assignCourseNew(@RequestParam(name = "course_id") Long course_id,
+                               @RequestParam(name = "student_id") Long student_id,
+                                  @RequestParam(name="teacher_id") Long teacher_id,Model model) {
 
 
-        User user = userService.getUser(student_id);
-        if (user != null) {
+        User teacher=userService.getUser(teacher_id);
+        User student = userService.getUser(student_id);
+        if (student != null) {
             Course course = courseService.getCourse(course_id);
             if (course != null) {
-                List<Course> courseList = user.getCourses(); //
-                if (courseList == null) {
-                    courseList = new ArrayList<>();
-                }
-                if(!courseList.contains(course)){
-                    courseList.add(course);
-                }
-
-                user.setCourses(courseList);
-                userService.saveUser(user);
-
                 CourseMark courseMark=new CourseMark();
-                courseMark.setStudent(user);
+                courseMark.setMarkValue(0);
+                courseMark.setTeacher(teacher);
+                courseMark.setStudent(student);
                 courseMark.setCourse(course);
 
+                CourseMark courseMark1=courseMarkService.findCourseMark(course_id,student_id);
+                if(courseMark1==null){
+                    userService.saveUser(student);
+                    courseMarkService.save(courseMark);
+                }
 
-                model.addAttribute("courses", user.getCourses());
-                return "redirect:/courses/"+user.getId();
+
+
+                return "redirect:/courses/"+student.getId();
             }
         }
-        return "redirect:/courses/"+user.getId();
+        return "redirect:/courses/"+student.getId();
     }
+
 
     @GetMapping(value = "/view-photo/{photoName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public @ResponseBody
@@ -270,6 +359,12 @@ public class MainController {
             }
         }
         return null;
+    }
+
+
+    @GetMapping(value = "/announcement")
+    public String announcement(){
+        return "announce";
     }
 
 

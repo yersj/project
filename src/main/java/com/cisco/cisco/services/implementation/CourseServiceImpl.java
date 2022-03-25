@@ -19,5 +19,7 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getAllCourses(){
         return courseRepository.findAll();
     }
-
+    public List<Course> findTeacherCourses(Long teacher_id){
+        return courseRepository.findAllByTeacherId(teacher_id);
+    }
 }

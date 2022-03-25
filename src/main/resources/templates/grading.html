@@ -21,11 +21,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr  th:each="s:${students}">
+                <tr  th:each="c:${courseStudents}">
 
-                    <td   th:text="${s.fullName}"></td>
-                    <td><a th:href="@{'/grade-details/'+${s.id}+'/'+${courseId}}" class="btn btn-info">Details</a></td>
-
+                    <td   th:text="${c.student.fullName}"></td>
+                    <form th:action="@{'/grade-details/'+${c.student.id}+'/'+${c.course.id}+'/'+${c.teacher.id}}" method="post">
+                        <td><input type="text" name="newMark" th:value="${c.markValue==0}?'grade not set':${c.markValue}"></td>
+                        <td><button class="btn btn-secondary">Save</button></td>
+                    </form>
 
                 </tr>
 
@@ -33,6 +35,11 @@
             </table>
 
         </div>
+
+
+    </div>
+
+
     </div>
 
    </div>

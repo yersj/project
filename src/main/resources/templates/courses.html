@@ -12,20 +12,27 @@
             <table class="table mt-2">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
+
                     <th scope="col">Course Code</th>
                     <th scope="col">Course Name</th>
                     <th scope="col">Credits</th>
                     <th scope="col">Teacher</th>
+                    <th scope="col">Delete</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="course:${courses}">
-                    <th scope="row" th:text="${course.id}"></th>
-                    <td th:text="${course.code}"></td>
-                    <td th:text="${course.name}"></td>
-                    <td th:text="${course.credits}"></td>
-                    <td th:text="${course.getTeacher().fullName}"></td>
+                <tr th:each="course:${courseMarks}">
+                    <td th:text="${course.course.code}"></td>
+                    <td th:text="${course.course.name}"></td>
+                    <td th:text="${course.course.credits}"></td>
+                    <td th:text="${course.teacher.fullName}"></td>
+                    <td>
+                        <form th:action="@{'/delete-course'}" method="post">
+                            <input type="hidden" name="course_id" th:value="${course.course.id}">
+                            <input type="hidden" name="student_id" th:value="${currentUser.id}">
+                            <button class="btn btn-danger">-</button>
+                        </form>
+                    </td>
                 </tr>
 
                 </tbody>
@@ -56,6 +63,7 @@
                        <form th:action="@{'/assigncourse'}" method="post">
                            <input type="hidden" name="course_id" th:value="${course.id}">
                            <input type="hidden" name="student_id" th:value="${currentUser.id}">
+                           <input type="hidden" name="teacher_id" th:value="${course.teacher.id}">
                            <button class="btn btn-info">+</button>
                        </form>
                    </td>

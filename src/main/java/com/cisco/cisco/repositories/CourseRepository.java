@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 @Transactional
 public interface CourseRepository extends JpaRepository<Course,Long> {
-    List<Course> findAllById(Long id);
+    List<Course> findAllByTeacherId(Long teacher_id);
 
 }
